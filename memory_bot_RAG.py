@@ -43,7 +43,7 @@ st.markdown("""
 # ── Knowledge Base ──
 COMPANY_DOCS = [
     Document(page_content="""
-    FitZen is a fitness app founded in 2022. Our mission is to make
+    FitZen is a fitness app founded in 2026. Our mission is to make
     personalized fitness accessible to everyone. We offer yoga, HIIT,
     and meditation programs. Monthly subscription is Rs.299.
     """),
