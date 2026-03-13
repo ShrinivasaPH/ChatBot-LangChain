@@ -7,6 +7,7 @@ from langchain_core.documents import Document
 from langchain_core.runnables import RunnablePassthrough
 from langchain_core.output_parsers import StrOutputParser
 import os
+import numpy as np 
 
 # ── API Key ──
 OPENAI_API_KEY = "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"
