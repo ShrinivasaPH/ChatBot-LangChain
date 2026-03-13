@@ -9,7 +9,7 @@ import os
 
 # ── Page Config ──
 st.set_page_config(
-    page_title="FitZen Support",
+    page_title="FitZen Support AI Bot",
     page_icon="🧘",
     layout="centered"
 )
