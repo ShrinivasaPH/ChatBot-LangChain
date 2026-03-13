@@ -27,13 +27,17 @@ st.markdown("""
     .fitzen-header { text-align: center; padding: 2rem 0 1rem; }
     .fitzen-header h1 { font-family: 'Fraunces', serif; font-size: 2.6rem; color: #2d2d2d; margin-bottom: 0.2rem; }
     .fitzen-header p { color: #7a6f65; font-size: 1rem; }
+    .fitzen-header .badge {
+        display: inline-block; background: #fff0e0; border: 1px solid #e8cfa0;
+        color: #b07d3a; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.07em;
+        text-transform: uppercase; padding: 0.2rem 0.7rem; border-radius: 20px; margin-top: 0.5rem;
+    }
     .chat-bubble { padding: 0.85rem 1.1rem; border-radius: 14px; margin-bottom: 0.5rem; font-size: 0.95rem; line-height: 1.6; max-width: 85%; }
     .user-bubble { background-color: #e8f4ef; color: #1a3329; margin-left: auto; border-bottom-right-radius: 4px; }
     .bot-bubble { background-color: #fff8f0; color: #2d2d2d; border: 1px solid #eddfc8; border-bottom-left-radius: 4px; }
     .bubble-label { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 0.3rem; color: #a8998a; }
     .stChatInput > div { border: 1.5px solid #ddd0bb !important; border-radius: 12px !important; background-color: #fffcf8 !important; }
     [data-testid="stSidebar"] { background-color: #fff8f0; border-right: 1px solid #eddfc8; }
-    [data-testid="stSidebar"] h2 { font-family: 'Fraunces', serif; color: #2d2d2d; }
     .stSpinner > div { border-top-color: #6dab8a !important; }
     hr { border-color: #eddfc8; }
 </style>
@@ -45,16 +49,16 @@ COMPANY_DOCS = [
     Document(page_content="""
     FitZen is a fitness app founded in 2022. Our mission is to make
     personalized fitness accessible to everyone. We offer yoga, HIIT,
-    and meditation programs. Monthly subscription is ₹299.
+    and meditation programs. Monthly subscription is Rs.299.
     """),
     Document(page_content="""
-    FitZen's cancellation policy: Users can cancel anytime from Settings →
-    Subscription → Cancel. Refunds are available within 7 days of billing.
+    FitZen's cancellation policy: Users can cancel anytime from Settings ->
+    Subscription -> Cancel. Refunds are available within 7 days of billing.
     Contact support@fitzen.in for help.
     """),
     Document(page_content="""
     FitZen Premium includes offline downloads, custom meal plans, and
-    live sessions with certified trainers. Premium costs ₹599/month.
+    live sessions with certified trainers. Premium costs Rs.599/month.
     """),
     Document(page_content="""
     Using the Fitzen App, you can order your food to your location. One plate
@@ -69,10 +73,10 @@ Guidelines:
 - Answer using the context provided below whenever possible.
 - If the user's message is a short follow-up reaction (like "Really?", "Are you sure?", "Wow!",
   "Tell me more", "That's great!", "Interesting!", "Makes sense", "Oh okay"), use the conversation
-  history to give a natural, confirming, or elaborating response — exactly like a human would.
+  history to give a natural, confirming, or elaborating response - exactly like a human would.
 - If the question is completely outside the context and you genuinely cannot answer, respond humbly.
   For example: "That's a great question! I'm afraid I don't have that information right now.
-  For further help, feel free to reach out to support@fitzen.in 😊"
+  For further help, feel free to reach out to support@fitzen.in"
   Never bluntly say "I don't know."
 - Keep responses warm, concise, and human.
 
@@ -113,13 +117,11 @@ def run_rag(question: str, history: list) -> str:
     docs = retriever.invoke(question)
     context = format_docs(docs)
     hist_text = format_history(history)
-
     prompt_value = RAG_PROMPT.invoke({
         "history": hist_text,
         "context": context,
         "question": question
     })
-
     llm = ChatOpenAI(model="gpt-4o-mini")
     response = llm.invoke(prompt_value)
     return StrOutputParser().invoke(response)
@@ -128,19 +130,16 @@ def run_rag(question: str, history: list) -> str:
 # ── Small Talk Handler ──
 SMALL_TALK = {
     ("hello", "hi", "hey", "howdy", "hiya"):
-        "Hello! 👋 Welcome to FitZen Support. How can I help you today?",
+        "Hello! Welcome to FitZen Support. How can I help you today?",
     ("how are you", "how are you doing", "how do you do"):
-        "I'm doing great, thanks for asking! 😊 How can I assist you with FitZen today?",
-    ("good morning",):
-        "Good morning! ☀️ How can I help you with FitZen today?",
-    ("good evening",):
-        "Good evening! 🌙 How can I help you with FitZen today?",
-    ("good afternoon",):
-        "Good afternoon! How can I help you with FitZen today?",
+        "I'm doing great, thanks for asking! How can I assist you with FitZen today?",
+    ("good morning",): "Good morning! How can I help you with FitZen today?",
+    ("good evening",): "Good evening! How can I help you with FitZen today?",
+    ("good afternoon",): "Good afternoon! How can I help you with FitZen today?",
     ("bye", "goodbye", "see you", "see ya", "take care"):
-        "Goodbye! 👋 Have a great day and stay fit with FitZen! 🧘",
+        "Goodbye! Have a great day and stay fit with FitZen!",
     ("thanks", "thank you", "thank you so much", "thanks a lot"):
-        "You're welcome! 😊 Feel free to ask if you have any other questions.",
+        "You're welcome! Feel free to ask if you have any other questions.",
 }
 
 def get_small_talk_response(text: str):
@@ -151,9 +150,58 @@ def get_small_talk_response(text: str):
     return None
 
 
-# ── Sidebar ──
+# ══════════════════════════════════════════════
+# SIDEBAR
+# ══════════════════════════════════════════════
 with st.sidebar:
-    st.markdown("## 💡 Try asking")
+
+    # ── About Card ──
+    st.markdown("""
+    <div style="background:#fff0e0; border:1px solid #e8cfa0; border-radius:10px; padding:0.9rem 1rem 1rem; margin-bottom:0.8rem;">
+        <div style="font-size:0.68rem; font-weight:700; letter-spacing:0.09em; text-transform:uppercase; color:#b07d3a; margin-bottom:0.35rem;">Academic Project</div>
+        <div style="font-size:1rem; font-weight:700; color:#2d2d2d; font-family:'Georgia', serif;">Shrinivasa PH</div>
+        <div style="font-size:0.8rem; color:#7a6f65; margin-top:0.4rem; line-height:1.5;">
+            A demo chatbot built to showcase Retrieval-Augmented Generation (RAG) using LangChain.<br><br>
+            <span style="font-style:italic; color:#b07d3a;">FitZen is a fictional company created solely for this demonstration.</span>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # ── Tech Stack ──
+    with st.expander("⚙️ Tech Stack & Concepts", expanded=False):
+        st.markdown("""
+**🔗 LangChain**
+A framework for building LLM-powered apps. Connects prompts, models, retrievers, and parsers into clean, composable pipelines.
+
+---
+**📚 RAG — Retrieval-Augmented Generation**
+Instead of relying solely on the LLM's training data, RAG first *retrieves* relevant documents and passes them as context — grounding answers in your actual knowledge base.
+
+---
+**🔢 Embeddings**
+Text is converted into numerical vectors (lists of floats) capturing *semantic meaning*. Similar sentences cluster together in this vector space, enabling meaning-based search — not just keyword matching.
+
+---
+**🗄️ Vector Store — FAISS**
+A database optimised for storing and searching embedding vectors. A user's question is embedded and compared against stored vectors to instantly find the most relevant document chunks.
+
+---
+**⛓️ LCEL — LangChain Expression Language**
+A declarative `|` pipe syntax for chaining components:
+```
+retriever | prompt | llm | parser
+```
+Each step feeds output into the next — readable and composable.
+
+---
+**🤖 LLM — GPT-4o Mini**
+OpenAI's efficient model that generates the final response, given retrieved context and conversation history.
+        """)
+
+    st.markdown("---")
+
+    # ── Sample Questions ──
+    st.markdown("**💡 Try asking**")
     sample_questions = [
         "How much does FitZen Premium cost?",
         "How do I get a refund?",
@@ -171,11 +219,16 @@ with st.sidebar:
         st.rerun()
 
 
+# ══════════════════════════════════════════════
+# MAIN AREA
+# ══════════════════════════════════════════════
+
 # ── Header ──
 st.markdown("""
 <div class="fitzen-header">
     <h1>🧘 FitZen Support</h1>
-    <p>Ask me anything about FitZen — plans, refunds, features & more.</p>
+    <p>Ask me anything about FitZen (a fictional company) — plans, refunds, features & more.</p>
+    <span class="badge">Academic Demo &nbsp;·&nbsp; Shrinivasa PH</span>
 </div>
 """, unsafe_allow_html=True)
 
@@ -230,7 +283,7 @@ def answer_question(question: str):
                 history_so_far = st.session_state.messages[:-1]
                 response = run_rag(question, history_so_far)
             except Exception as e:
-                response = f"❌ Error: {str(e)}"
+                response = f"Error: {str(e)}"
 
     st.session_state.messages.append({"role": "assistant", "content": response})
 
