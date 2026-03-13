@@ -245,7 +245,7 @@ st.markdown("""
 <div class="fitzen-header">
     <h1>🧘 FitZen Support ChatBot</h1>
     <h4>Ask me anything about FitZen.</h4>
-    <p>Plans, Refunds, Features & More.</p>        
+    <h5>Plans, Refunds, Features & More.</h5>        
     <span class="badge">Academic Demo &nbsp;·&nbsp; Shrinivasa PH</span>
 </div>
 """, unsafe_allow_html=True)
