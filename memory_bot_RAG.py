@@ -227,7 +227,8 @@ OpenAI's efficient model that generates the final response, given retrieved cont
 st.markdown("""
 <div class="fitzen-header">
     <h1>🧘 FitZen Support</h1>
-    <p>Ask me anything about FitZen (a fictional company) — plans, refunds, features & more.</p>
+    <p>Ask me anything about FitZen (a fictional company).</p>
+    <p><em>Plans, Refunds, Features & More.</em></p>
     <span class="badge">Academic Demo &nbsp;·&nbsp; Shrinivasa PH</span>
 </div>
 """, unsafe_allow_html=True)
