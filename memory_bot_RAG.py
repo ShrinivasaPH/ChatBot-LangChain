@@ -169,7 +169,7 @@ with st.sidebar:
         help="Your key is used only for this session and never stored."
     )
     if not api_key:
-        st.warning("Enter your OpenAI API Key above to start chatting. Go to https://platform.openai.com/ LOGIN, check your subscription and get the API key from there.")
+        st.warning("Enter your OpenAI API Key above to start chatting. Get your key from https://platform.openai.com/ .")
     st.markdown("---")
 
     # ── About Card ──
