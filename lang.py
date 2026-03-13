@@ -5,6 +5,12 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_core.documents import Document
 from langchain_core.runnables import RunnablePassthrough
 from langchain_core.output_parsers import StrOutputParser
+import os
+
+key = "I'll paste Key later here"
+
+os.environ["OPENAI_API_KEY"] = key 
+
 
 # ── 1. Your "knowledge base" (can come from a PDF, website, etc.) ──
 company_docs = [
