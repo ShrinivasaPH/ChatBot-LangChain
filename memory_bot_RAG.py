@@ -326,4 +326,4 @@ if st.session_state.pending_question:
 user_input = st.chat_input("Ask a question about FitZen…")
 if user_input:
     answer_question(user_input)
-st.badge("The App may make mistakes. Do not blindly rely on it!")
+st.badge("A demo chatbot built to showcase Retrieval-Augmented Generation (RAG) using LangChain.")
