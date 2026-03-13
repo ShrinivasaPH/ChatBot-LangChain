@@ -326,3 +326,4 @@ if st.session_state.pending_question:
 user_input = st.chat_input("Ask a question about FitZen…")
 if user_input:
     answer_question(user_input)
+st.caption("The App may make mistakes. Do not blindly rely on it!")
