@@ -7,10 +7,6 @@ from langchain_core.documents import Document
 from langchain_core.output_parsers import StrOutputParser
 import os
 
-# ── API Key ──
-OPENAI_API_KEY = "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"
-os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY
-
 # ── Page Config ──
 st.set_page_config(
     page_title="FitZen Support",
@@ -111,7 +107,8 @@ def format_history(messages: list) -> str:
 
 
 @st.cache_resource(show_spinner=False)
-def build_retriever():
+def build_retriever(api_key: str):
+    os.environ["OPENAI_API_KEY"] = api_key
     splitter = RecursiveCharacterTextSplitter(chunk_size=300, chunk_overlap=50)
     chunks = splitter.split_documents(COMPANY_DOCS)
     embeddings = OpenAIEmbeddings()
@@ -119,8 +116,9 @@ def build_retriever():
     return vectorstore.as_retriever(search_kwargs={"k": 2})
 
 
-def run_rag(question: str, history: list) -> str:
-    retriever = build_retriever()
+def run_rag(question: str, history: list, api_key: str) -> str:
+    os.environ["OPENAI_API_KEY"] = api_key
+    retriever = build_retriever(api_key)
     docs = retriever.invoke(question)
     context = format_docs(docs)
     hist_text = format_history(history)
@@ -129,7 +127,7 @@ def run_rag(question: str, history: list) -> str:
         "context": context,
         "question": question
     })
-    llm = ChatOpenAI(model="gpt-4o-mini")
+    llm = ChatOpenAI(model="gpt-4o-mini", api_key=api_key)
     response = llm.invoke(prompt_value)
     return StrOutputParser().invoke(response)
 
@@ -161,6 +159,17 @@ def get_small_talk_response(text: str):
 # SIDEBAR
 # ══════════════════════════════════════════════
 with st.sidebar:
+
+    # ── API Key Input ──
+    api_key = st.text_input(
+        "🔑 OpenAI API Key",
+        type="password",
+        placeholder="sk-...",
+        help="Your key is used only for this session and never stored."
+    )
+    if not api_key:
+        st.warning("Enter your OpenAI API Key above to start chatting.")
+    st.markdown("---")
 
     # ── About Card ──
     st.markdown("""
@@ -270,6 +279,9 @@ for msg in st.session_state.messages:
 
 # ── Handle a question ──
 def answer_question(question: str):
+    if not api_key:
+        st.warning("Please enter your OpenAI API Key in the sidebar to start chatting.")
+        return
     st.session_state.messages.append({"role": "user", "content": question})
 
     st.markdown(f"""
@@ -288,7 +300,7 @@ def answer_question(question: str):
         with st.spinner("Thinking..."):
             try:
                 history_so_far = st.session_state.messages[:-1]
-                response = run_rag(question, history_so_far)
+                response = run_rag(question, history_so_far, api_key)
             except Exception as e:
                 response = f"Error: {str(e)}"
 
