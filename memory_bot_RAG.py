@@ -244,7 +244,7 @@ OpenAI's efficient model that generates the final response, given retrieved cont
 st.markdown("""
 <div class="fitzen-header">
     <h1>🧘 FitZen Support ChatBot</h1>
-    <h2>Ask me anything about FitZen.</h2>
+    <h3>Ask me anything about FitZen.</h3>
     <p>Plans, Refunds, Features & More.</p>        
     <span class="badge">Academic Demo &nbsp;·&nbsp; Shrinivasa PH</span>
 </div>
