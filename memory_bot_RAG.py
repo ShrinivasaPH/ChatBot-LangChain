@@ -28,7 +28,7 @@ st.markdown("""
         color: #b07d3a; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.07em;
         text-transform: uppercase; padding: 0.2rem 0.7rem; border-radius: 20px; margin-top: 0.5rem;
     }
-    .chat-bubble { padding: 0.85rem 1.1rem; border-radius: 14px; margin-bottom: 0.5rem; font-size: 0.95rem; line-height: 1.6; max-width: 85%; }
+    .chat-bubble { padding: 0.85rem 1.1rem; border-radius: 14px; margin-bottom: 0.5rem; font-size: 0.95rem; line-height: 1.6; max-width: 85%; width: fit-content; word-break: break-word;}
     .user-bubble { background-color: #e8f4ef; color: #1a3329; margin-left: auto; border-bottom-right-radius: 4px; }
     .bot-bubble { background-color: #fff8f0; color: #2d2d2d; border: 1px solid #eddfc8; border-bottom-left-radius: 4px; }
     .bubble-label { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 0.3rem; color: #a8998a; }
