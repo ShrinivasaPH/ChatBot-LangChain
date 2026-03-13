@@ -140,7 +140,7 @@ COMPANY_DOCS = [
 
 RAG_PROMPT = ChatPromptTemplate.from_template("""
 You are a helpful customer support agent for FitZen.
-Answer ONLY using the context below. If unsure, say "I don't know."
+Answer ONLY using the context below. If unsure, say "I currently do not have the information regarding this. However, we are trying our best to assist you. You contact the customer support number '123456788' if you need specific details regarding."
 
 Context:
 {context}
@@ -230,6 +230,32 @@ for msg in st.session_state.messages:
         """, unsafe_allow_html=True)
 
 
+# ── Small Talk Handler ──
+SMALL_TALK = {
+    ("hello", "hi", "hey", "howdy", "hiya"):
+        "Hello! 👋 Welcome to FitZen Support. How can I help you today?",
+    ("how are you", "how are you doing", "how do you do"):
+        "I'm doing great, thanks for asking! 😊 How can I assist you with FitZen today?",
+    ("good morning",):
+        "Good morning! ☀️ How can I help you with FitZen today?",
+    ("good evening",):
+        "Good evening! 🌙 How can I help you with FitZen today?",
+    ("good afternoon",):
+        "Good afternoon! How can I help you with FitZen today?",
+    ("bye", "goodbye", "see you", "see ya", "take care"):
+        "Goodbye! 👋 Have a great day and stay fit with FitZen! 🧘",
+    ("thanks", "thank you", "thank you so much", "thanks a lot"):
+        "You're welcome! 😊 Feel free to ask if you have any other questions.",
+}
+
+def get_small_talk_response(text: str):
+    lowered = text.strip().lower().rstrip("!.,?")
+    for triggers, reply in SMALL_TALK.items():
+        if lowered in triggers:
+            return reply
+    return None
+
+
 # ── Handle a question (from input OR sidebar button) ──
 def answer_question(question: str):
     st.session_state.messages.append({"role": "user", "content": question})
@@ -244,12 +270,16 @@ def answer_question(question: str):
     </div>
     """, unsafe_allow_html=True)
 
-    with st.spinner("Thinking..."):
-        try:
-            chain = build_rag_chain()
-            response = chain.invoke(question)
-        except Exception as e:
-            response = f"❌ Error: {str(e)}"
+    small_talk = get_small_talk_response(question)
+    if small_talk:
+        response = small_talk
+    else:
+        with st.spinner("Thinking..."):
+            try:
+                chain = build_rag_chain()
+                response = chain.invoke(question)
+            except Exception as e:
+                response = f"❌ Error: {str(e)}"
 
     st.session_state.messages.append({"role": "assistant", "content": response})
 
