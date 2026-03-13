@@ -1,0 +1,5 @@
+langchain 
+langchain-openai 
+faiss-cpu -q
+langchain-community
+langchain_text_splitters
