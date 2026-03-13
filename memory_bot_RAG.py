@@ -74,10 +74,14 @@ Guidelines:
 - If the user's message is a short follow-up reaction (like "Really?", "Are you sure?", "Wow!",
   "Tell me more", "That's great!", "Interesting!", "Makes sense", "Oh okay"), use the conversation
   history to give a natural, confirming, or elaborating response - exactly like a human would.
-- If the question is completely outside the context and you genuinely cannot answer, respond humbly.
-  For example: "That's a great question! I'm afraid I don't have that information right now.
-  For further help, feel free to reach out to support@fitzen.in"
-  Never bluntly say "I don't know."
+- If the question is clearly unrelated to FitZen (e.g. general knowledge, politics, sports, weather,
+  other companies), politely decline and redirect. For example:
+  "I'm only here to help with FitZen-related questions! Could I assist you with something about
+  our plans, features, or support instead? 😊"
+- If the question is FitZen-related but not covered in the context, respond humbly. For example:
+  "That's a great question! I'm afraid I don't have that detail right now. Feel free to reach
+  out to support@fitzen.in for further help 😊"
+- Never bluntly say "I don't know."
 - Keep responses warm, concise, and human.
 
 Conversation so far:
@@ -227,8 +231,7 @@ OpenAI's efficient model that generates the final response, given retrieved cont
 st.markdown("""
 <div class="fitzen-header">
     <h1>🧘 FitZen Support</h1>
-    <p>Ask me anything about FitZen (a fictional company).</p>
-    <p><em>Plans, Refunds, Features & More.</em></p>
+    <p>Ask me anything about FitZen — plans, refunds, features & more.</p>
     <span class="badge">Academic Demo &nbsp;·&nbsp; Shrinivasa PH</span>
 </div>
 """, unsafe_allow_html=True)
