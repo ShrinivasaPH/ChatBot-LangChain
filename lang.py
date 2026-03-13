@@ -1,3 +1,4 @@
+'''
 from langchain_core.prompts import ChatPromptTemplate, PromptTemplate
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 from langchain_community.vectorstores import FAISS
@@ -7,9 +8,9 @@ from langchain_core.runnables import RunnablePassthrough
 from langchain_core.output_parsers import StrOutputParser
 import os
 
-key = "I'll paste Key later here"
+api_key = "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"
 
-os.environ["OPENAI_API_KEY"] = key 
+os.environ["OPENAI_API_KEY"] = api_key 
 
 
 # ── 1. Your "knowledge base" (can come from a PDF, website, etc.) ──
@@ -74,3 +75,4 @@ print(rag_chain.invoke("How much does FitZen Premium cost?"))
 
 print(rag_chain.invoke("How do I get a refund?"))
 # → "Refunds are available within 7 days of billing..."
+'''
