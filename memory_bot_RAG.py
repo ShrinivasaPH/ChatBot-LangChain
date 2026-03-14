@@ -13,7 +13,7 @@ os.environ["OPENAI_API_KEY"] = api_key
 
 # ── Page Config ──
 st.set_page_config(
-    page_title="FitZen Support ✨",
+    page_title="FitZen Support",
     page_icon="🧘",
     layout="centered"
 )
@@ -105,7 +105,7 @@ def format_history(messages: list) -> str:
     recent = messages[-6:] if len(messages) > 6 else messages
     lines = []
     for m in recent:
-        role = "User" if m["role"] == "user" else "FitZen Support ✨"
+        role = "User" if m["role"] == "user" else "FitZen Support"
         lines.append(f"{role}: {m['content']}")
     return "\n".join(lines) if lines else "No prior conversation."
 
@@ -235,7 +235,7 @@ OpenAI's efficient model that generates the final response, given retrieved cont
 # ── Header ──
 st.markdown("""
 <div class="fitzen-header">
-    <h1>🧘 FitZen Support</h1>
+    <h1>🧘 FitZen Support ✨</h1>
     <p>Ask me anything about FitZen — plans, refunds, features & more.</p>
     <span class="badge">Academic Demo &nbsp;·&nbsp; Shrinivasa PH</span>
 </div>
