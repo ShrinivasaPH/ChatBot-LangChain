@@ -7,13 +7,9 @@ from langchain_core.documents import Document
 from langchain_core.output_parsers import StrOutputParser
 import os
 
-# ── API Key ──
-api_key = st.secrets["OPENAI_API_KEY"]
-os.environ["OPENAI_API_KEY"] = api_key
-
 # ── Page Config ──
 st.set_page_config(
-    page_title="FitZen Support",
+    page_title="FitZen Support AI Bot",
     page_icon="🧘",
     layout="centered"
 )
@@ -32,7 +28,7 @@ st.markdown("""
         color: #b07d3a; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.07em;
         text-transform: uppercase; padding: 0.2rem 0.7rem; border-radius: 20px; margin-top: 0.5rem;
     }
-    .chat-bubble { padding: 0.85rem 1.1rem; border-radius: 14px; margin-bottom: 0.5rem; font-size: 0.95rem; line-height: 1.6; max-width: 85%; width: fit-content; word-break: break-word; }
+    .chat-bubble { padding: 0.85rem 1.1rem; border-radius: 14px; margin-bottom: 0.5rem; font-size: 0.95rem; line-height: 1.6; max-width: 85%; width: fit-content; word-break: break-word;}
     .user-bubble { background-color: #e8f4ef; color: #1a3329; margin-left: auto; border-bottom-right-radius: 4px; }
     .bot-bubble { background-color: #fff8f0; color: #2d2d2d; border: 1px solid #eddfc8; border-bottom-left-radius: 4px; }
     .bubble-label { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 0.3rem; color: #a8998a; }
@@ -47,7 +43,7 @@ st.markdown("""
 # ── Knowledge Base ──
 COMPANY_DOCS = [
     Document(page_content="""
-    FitZen is a fitness app founded in 2022. Our mission is to make
+    FitZen is a fitness app founded in 2026. We are based out of Bengaluru, India. Our mission is to make
     personalized fitness accessible to everyone. We offer yoga, HIIT,
     and meditation programs. Monthly subscription is Rs.299.
     """),
@@ -78,7 +74,7 @@ Guidelines:
   (e.g. politics, sports scores, weather, celebrities, other companies, general knowledge),
   politely decline and redirect. For example:
   "I'm only here to help with FitZen-related questions! Could I assist you with something about
-  our plans, features, or support instead? 😊"
+  our plans, features, general health tips, or support instead? 😊"
 - If the question is about FitZen or could reasonably relate to FitZen (facilities, location,
   trainers, app features, food, policies, etc.) but is not covered in the context, respond humbly.
   For example: "That's a great question! I'm afraid I don't have that detail right now.
@@ -86,6 +82,7 @@ Guidelines:
 - When in doubt, treat the question as FitZen-related and respond humbly rather than redirecting.
 - Never bluntly say "I don't know."
 - Keep responses warm, concise, and human.
+- However, if the user asks any health tips, try to give some general tips but never give medical advises.
 
 Conversation so far:
 {history}
@@ -164,6 +161,17 @@ def get_small_talk_response(text: str):
 # ══════════════════════════════════════════════
 with st.sidebar:
 
+    # ── API Key Input ──
+    api_key = st.text_input(
+        "🔑 OpenAI API Key",
+        type="password",
+        placeholder="sk-...",
+        help="Your key is used only for this session and never stored."
+    )
+    if not api_key:
+        st.warning("Enter your OpenAI API Key above to start chatting. Get your key from https://platform.openai.com/")
+    st.markdown("---")
+
     # ── About Card ──
     st.markdown("""
     <div style="background:#fff0e0; border:1px solid #e8cfa0; border-radius:10px; padding:0.9rem 1rem 1rem; margin-bottom:0.8rem;">
@@ -235,8 +243,9 @@ OpenAI's efficient model that generates the final response, given retrieved cont
 # ── Header ──
 st.markdown("""
 <div class="fitzen-header">
-    <h1>🧘 FitZen Support</h1>
-    <p>Ask me anything about FitZen — plans, refunds, features & more.</p>
+    <h1>🧘 FitZen Support ChatBot</h1>
+    <h4>Ask me anything about FitZen.</h4>
+    <h5>Plans, Refunds, Features & More.</h5>        
     <span class="badge">Academic Demo &nbsp;·&nbsp; Shrinivasa PH</span>
 </div>
 """, unsafe_allow_html=True)
@@ -272,7 +281,9 @@ for msg in st.session_state.messages:
 
 # ── Handle a question ──
 def answer_question(question: str):
-
+    if not api_key:
+        st.warning("Please enter your OpenAI API Key in the sidebar to start chatting.")
+        return
     st.session_state.messages.append({"role": "user", "content": question})
 
     st.markdown(f"""
@@ -315,3 +326,4 @@ if st.session_state.pending_question:
 user_input = st.chat_input("Ask a question about FitZen…")
 if user_input:
     answer_question(user_input)
+st.badge("A demo chatbot built to showcase Retrieval-Augmented Generation (RAG) using LangChain.")
